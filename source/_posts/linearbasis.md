@@ -3,7 +3,6 @@ title: Linear basis for xor
 date: 2018-01-16 23:22:49
 tags: [Math] 
 categories: [Algorithm]
-mathjax: true
 ---
 練習的時候有幾次遇到 xor 的題目
 自己怎想都想不到
