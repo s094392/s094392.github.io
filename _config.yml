@@ -120,11 +120,34 @@ theme_config:
 
   projects_url: https://github.com/s094392
 
+  posts_overview:
+    show_all_posts: true
+    post_count: 7
+    sort_updated: false
+
+  nav:
+    home: /
+    about: /about/
+    articles: /archives/
+
+  # Fill in your Disqus Comments Shortname to enable Disqus comments.
+  disqus:
+    enabled: true
+    shortname: s094392
+
+  # Fill in your Google Analytics tracking ID to enable Google Analytics.
+  google_analytics:
+    enabled: true
+    id: UA-139969821-1
+
+
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: ''
+  type: 'git'
+  repo: 'git@github.com:s094392/s094392.github.io.git'
+  branch: 'master'
 
 # MathJax
 math:
