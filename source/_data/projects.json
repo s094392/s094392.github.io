@@ -1,0 +1,22 @@
+[
+    {
+        "name":"Penathon",
+        "url":"https://github.com/Team214-tw/penathon",
+        "desc":"A inference based type generator for Python, ykzheng improved."
+    },
+    {
+        "name":"Python ast visualizer",
+        "url":"https://github.com/Team214-tw/python-ast-visualizer",
+        "desc":"Visualize the python ast in a tree form."
+    },
+    {
+       "name":"RISC-V Bare Metal",
+       "url":"https://github.com/s094392/riscv-bare-metal",
+       "desc":"A RISC-V bare-metal example with uart, exception and interrupt."
+    },
+    {
+       "name":"Telegram Client",
+       "url":"https://github.com/s094392/Telegram-Client",
+       "desc":"A Telegram client based on a STM32L476RG board, magic and trash"
+    }
+]

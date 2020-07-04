@@ -1,5 +1,5 @@
 ---
-title: anaconda 與 yaourt 衝突
+title: Anaconda 與 yaourt 衝突
 date: 2015-10-22 23:33:30
 tags: [Arch]
 categories: [Debug]

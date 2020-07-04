@@ -1,10 +1,11 @@
 ---
 title: RISC-V Introduction
 date: 2020-07-04 00:01:38
-tags: [Architecture]
+tags: 
+categories: [Architecture]
 ---
 ## Introduction
-RISC-V is an open standard Instruction Set Architecture. Unlike most other ISA designs, the RISC-V ISA is provided under open source licenses that do not require fees to use. The RISC-V was first introduced at 2010 by David Patterson at Berkeley. RISC-V is widely adopted by a lot of companies because the features like modular design and open source licenses fits current environment of IoT and Machine learning edge devices.
+RISC-V is an open standard Instruction Set Architecture. Unlike most other ISA designs, the RISC-V ISA is provided under open source licenses that do not require fees to use. The RISC-V was first introduced at 2010 by David Patterson at Berkeley. RISC-V is widely adopted by a lot of companies because the features like modular design and open source licenses fit current environment of IoT and Machine learning edge devices.
 {% asset_img riscv.png [riscv-introduction] %}
 
 ## Key Features
