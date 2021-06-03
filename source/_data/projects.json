@@ -5,14 +5,19 @@
         "desc":"A inference based type generator for Python, ykzheng improved."
     },
     {
-        "name":"Python ast visualizer",
-        "url":"https://github.com/Team214-tw/python-ast-visualizer",
-        "desc":"Visualize the python ast in a tree form."
-    },
-    {
        "name":"RISC-V Bare Metal",
        "url":"https://github.com/s094392/riscv-bare-metal",
        "desc":"A RISC-V bare-metal example with uart, exception and interrupt."
+    },
+    {
+       "name":"Raspberry Pi Simple OS(Course project)",
+       "url":"https://github.com/s094392/riscv-bare-metal",
+       "desc":"A operating system with process & memory management and a simple file system."
+    },
+    {
+        "name":"Python ast visualizer",
+        "url":"https://github.com/Team214-tw/python-ast-visualizer",
+        "desc":"Visualize the python ast in a tree form."
     },
     {
        "name":"Telegram Client",
