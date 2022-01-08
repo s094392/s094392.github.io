@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="最近幫一個朋友裝了 Arch 想說順便紀錄一下安裝步驟，希望沒有寫錯或遺漏的 XD他的電腦是 Asus N580VD，跟 Linux 相容的很好，推推 事前準備安裝之前當然要下載安裝媒體啦，可以去官網下載然後燒到 usb 裡面，記得選 Taiwan 的 mirror 下載比較快然後用 usb 開機就可以開始安裝了然後建議安裝的時候準備另一台電腦或是手機可以邊裝邊查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arch Linux 安裝小筆記">
+<meta property="og:url" content="https://muller.nctu.me/2017/11/28/arch-installation/index.html">
+<meta property="og:site_name" content="睦">
+<meta property="og:description" content="最近幫一個朋友裝了 Arch 想說順便紀錄一下安裝步驟，希望沒有寫錯或遺漏的 XD他的電腦是 Asus N580VD，跟 Linux 相容的很好，推推 事前準備安裝之前當然要下載安裝媒體啦，可以去官網下載然後燒到 usb 裡面，記得選 Taiwan 的 mirror 下載比較快然後用 usb 開機就可以開始安裝了然後建議安裝的時候準備另一台電腦或是手機可以邊裝邊查">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-11-27T19:14:32.000Z">
+<meta property="article:modified_time" content="2022-01-08T02:21:17.700Z">
+<meta property="article:author" content="Muller Lee">
+<meta property="article:tag" content="Arch">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/myfavicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/myandroid-icon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/myapple-icon-180x180.png">
+        
+      
+    
+    <!-- title -->
+    <title>Arch Linux 安裝小筆記</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2017/11/30/chewing/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2017/11/09/FOJ-254/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2017/11/28/arch-installation/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2017/11/28/arch-installation/&text=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2017/11/28/arch-installation/&is_video=false&description=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Arch Linux 安裝小筆記&body=Check out this article: https://muller.nctu.me/2017/11/28/arch-installation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2017/11/28/arch-installation/&name=Arch Linux 安裝小筆記&description=&lt;p&gt;最近幫一個朋友裝了 Arch 想說順便紀錄一下安裝步驟，希望沒有寫錯或遺漏的 XD&lt;br&gt;他的電腦是 Asus N580VD，跟 Linux 相容的很好，推推&lt;/p&gt;
+&lt;h2 id=&#34;事前準備&#34;&gt;&lt;a href=&#34;#事前準備&#34; class=&#34;headerlink&#34; title=&#34;事前準備&#34;&gt;&lt;/a&gt;事前準備&lt;/h2&gt;&lt;p&gt;安裝之前當然要下載安裝媒體啦，可以去&lt;a href=&#34;https://www.archlinux.org/download/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;官網&lt;/a&gt;下載然後燒到 usb 裡面，記得選 Taiwan 的 mirror 下載比較快&lt;br&gt;然後用 usb 開機就可以開始安裝了&lt;br&gt;然後建議安裝的時候準備另一台電腦或是手機可以邊裝邊查&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2017/11/28/arch-installation/&t=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#事前準備"><span class="toc-number">1.</span> <span class="toc-text">事前準備</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#連上網路"><span class="toc-number">2.</span> <span class="toc-text">連上網路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#切割硬碟"><span class="toc-number">3.</span> <span class="toc-text">切割硬碟</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化"><span class="toc-number">4.</span> <span class="toc-text">格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#掛載"><span class="toc-number">5.</span> <span class="toc-text">掛載</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-number">6.</span> <span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝-grub"><span class="toc-number">7.</span> <span class="toc-text">安裝 grub</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Arch Linux 安裝小筆記
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Muller Lee</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2017-11-27T19:14:32.000Z" itemprop="datePublished">2017-11-28</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Notes/">Notes</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Arch/" rel="tag">Arch</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>最近幫一個朋友裝了 Arch 想說順便紀錄一下安裝步驟，希望沒有寫錯或遺漏的 XD<br>他的電腦是 Asus N580VD，跟 Linux 相容的很好，推推</p>
+<h2 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h2><p>安裝之前當然要下載安裝媒體啦，可以去<a href="https://www.archlinux.org/download/" target="_blank" rel="noopener">官網</a>下載然後燒到 usb 裡面，記得選 Taiwan 的 mirror 下載比較快<br>然後用 usb 開機就可以開始安裝了<br>然後建議安裝的時候準備另一台電腦或是手機可以邊裝邊查</p>
+<a id="more"></a>
+
+<h2 id="連上網路"><a href="#連上網路" class="headerlink" title="連上網路"></a>連上網路</h2><p>因為 Arch Linux 是要連上網路才能安裝的，所以要連一下<br>建議是插上網路線，或是用手機連上去再用 usb 分享給電腦，或是有些比較幸運的話可以用 <code>wifi-menu</code><br>總之，插上之後要先抓一下 ip</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dhcpcd</span><br></pre></td></tr></table></figure>
+<p>如果它已經在執行的話就要先打 <code>dhcpcd -x</code> 關掉它<br>這樣就可以連上網路了<br>可以 ping 一下 8.8.8.8 試試看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.</span><br><span class="line">64 bytes from 8.8.8.8: icmp_seq&#x3D;1 ttl&#x3D;59 time&#x3D;2.45 ms</span><br><span class="line">64 bytes from 8.8.8.8: icmp_seq&#x3D;2 ttl&#x3D;59 time&#x3D;2.47 ms</span><br><span class="line">64 bytes from 8.8.8.8: icmp_seq&#x3D;3 ttl&#x3D;59 time&#x3D;2.42 ms</span><br></pre></td></tr></table></figure>
+<p>出現類似的東西應該就是連上了</p>
+<h2 id="切割硬碟"><a href="#切割硬碟" class="headerlink" title="切割硬碟"></a>切割硬碟</h2><p>如果有電腦裡面已經有 Windows 的話，要先去磁碟管理割出一些空間給 Linux 使用<br>通常使用 Linux 會割出</p>
+<ul>
+<li>EFI （開機用通常已經有了，假設他在 /dev/sda1）</li>
+<li>Swap (dev/sda2)</li>
+<li>Root (dev/sda3)</li>
+<li>Home (dev/sda4)</li>
+</ul>
+<p>把 Home 獨立出來的用意是重灌的時候比較方便的樣子，大小的話 EFI 2~300M，Root 大概 3, 40G 就可以了<br>使用 gdisk：<br>這裡 <code>/dev/sdx</code> 的 x 要看你要灌在哪個硬碟 可以先用 <code>fdisk -l</code> 看硬碟的狀況</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ gdisk &#x2F;dev&#x2F;sda</span><br><span class="line">GPT fdisk (gdisk) version 1.0.3</span><br><span class="line"></span><br><span class="line">Partition table scan:</span><br><span class="line">  MBR: protective</span><br><span class="line">  BSD: not present</span><br><span class="line">  APM: not present</span><br><span class="line">  GPT: present</span><br><span class="line"></span><br><span class="line">Found valid GPT with protective MBR; using GPT.</span><br><span class="line"></span><br><span class="line">Command (? for help):</span><br></pre></td></tr></table></figure>
+<p>然後打個 ? 看看他要怎麼用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">b	back up GPT data to a file</span><br><span class="line">c	change a partition&#39;s name</span><br><span class="line">d	delete a partition</span><br><span class="line">i	show detailed information on a partition</span><br><span class="line">l	list known partition types</span><br><span class="line">n	add a new partition</span><br><span class="line">o	create a new empty GUID partition table (GPT)</span><br><span class="line">p	print the partition table</span><br><span class="line">q	quit without saving changes</span><br><span class="line">r	recovery and transformation options (experts only)</span><br><span class="line">s	sort partitions</span><br><span class="line">t	change a partition&#39;s type code</span><br><span class="line">v	verify disk</span><br><span class="line">w	write table to disk and exit</span><br><span class="line">x	extra functionality (experts only)</span><br><span class="line">?	print this menu</span><br></pre></td></tr></table></figure>
+<p>所以新增磁區是用 n<br>接著它會問你 First sector、Last sector 跟 Hex code<br>First sector 按 Enter 就好<br>Last sector 輸入你要的磁區大小<br>Hex code 要看你割什麼 按 L 可以看表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0700 Microsoft basic data  0c01 Microsoft reserved    2700 Windows RE</span><br><span class="line">3000 ONIE boot             3001 ONIE config           3900 Plan 9</span><br><span class="line">4100 PowerPC PReP boot     4200 Windows LDM data      4201 Windows LDM metadata</span><br><span class="line">4202 Windows Storage Spac  7501 IBM GPFS              7f00 ChromeOS kernel</span><br><span class="line">7f01 ChromeOS root         7f02 ChromeOS reserved     8200 Linux swap</span><br><span class="line">8300 Linux filesystem      8301 Linux reserved        8302 Linux &#x2F;home</span><br><span class="line">8303 Linux x86 root (&#x2F;)    8304 Linux x86-64 root (&#x2F;  8305 Linux ARM64 root (&#x2F;)</span><br></pre></td></tr></table></figure>
+<p>要注意的是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ef00 EFI System  8300 Linux filesystem 8200 Linux swap</span><br></pre></td></tr></table></figure>
+<p>這裡示範其中一個：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Command (? for help): n</span><br><span class="line">Partition number (3-128, default 3):</span><br><span class="line">First sector (34-1953525134, default &#x3D; 878848000) or &#123;+-&#125;size&#123;KMGTP&#125;:</span><br><span class="line">Last sector (878848000-1953525134, default &#x3D; 1953525134) or &#123;+-&#125;size&#123;KMGTP&#125;: +16G</span><br><span class="line">Current type is &#39;Linux filesystem&#39;</span><br><span class="line">Hex code or GUID (L to show codes, Enter &#x3D; 8300): 8200</span><br><span class="line">Changed type of partition to &#39;Linux filesystem&#39;</span><br></pre></td></tr></table></figure>
+<p>這樣就會割好 16G 在第 3 磁區<br>然後依序割完 EFI Swap Root Home 就好了<br>割完可能會長這樣：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Number  Start (sector)    End (sector)  Size       Code  Name</span><br><span class="line">   1            2048          206847   100.0 MiB   EF00  EFI System</span><br><span class="line">   2          206848        33761279   16.0 GiB    8200  Linux swap</span><br><span class="line">   3       794961920       878847999   40.0 GiB    8300  Linux filesystem</span><br><span class="line">   4       117647360       180561919   30.0 GiB    8300  Linux filesystem</span><br></pre></td></tr></table></figure>
+<h2 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h2><p>Root Home 要格式化成 ext4</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkfs.ext4 &#x2F;dev&#x2F;sda3</span><br><span class="line">$ mkfs.ext4 &#x2F;dev&#x2F;sda4</span><br></pre></td></tr></table></figure>
+<p>EFI 要格式化成 FAT32</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkfs.vfat -F32 &#x2F;dev&#x2F;sda1</span><br></pre></td></tr></table></figure>
+
+<h2 id="掛載"><a href="#掛載" class="headerlink" title="掛載"></a>掛載</h2><p>然後把剛剛割完的磁區 mount 上去</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mount &#x2F;dev&#x2F;sda3 &#x2F;mnt</span><br><span class="line">$ mkdir -p &#x2F;mnt&#x2F;boot&#x2F;efi</span><br><span class="line">$ mount &#x2F;dev&#x2F;sda1 &#x2F;mnt&#x2F;boot&#x2F;efi</span><br><span class="line">$ mkdir -p &#x2F;mnt&#x2F;home</span><br><span class="line">$ mount &#x2F;dev&#x2F;sda4 &#x2F;mnt&#x2F;home</span><br></pre></td></tr></table></figure>
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><p>這裡建議先去改一下 mirrorlist 不然速度很慢</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$　vim &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist</span><br></pre></td></tr></table></figure>
+<p>然後把這個放到最前面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## Taiwan</span><br><span class="line">Server &#x3D; http:&#x2F;&#x2F;archlinux.cs.nctu.edu.tw&#x2F;$repo&#x2F;os&#x2F;$arch</span><br></pre></td></tr></table></figure>
+<p>接下來就安裝：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pacstrap &#x2F;mnt base base-devel</span><br></pre></td></tr></table></figure>
+
+<p>然後把剛剛掛載的東西加到 <code>/etc/fstab</code> 裡面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ genfstab -U -p &#x2F;mnt &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;fstab</span><br></pre></td></tr></table></figure>
+<p>chroot 進去然後建立 ramdisk</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ arch-chroot &#x2F;mnt</span><br><span class="line">$ mkinitcpio -p linux</span><br></pre></td></tr></table></figure>
+<h2 id="安裝-grub"><a href="#安裝-grub" class="headerlink" title="安裝 grub"></a>安裝 grub</h2><p>安裝 grub</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ pacman -S grub-efi-x86_64</span><br><span class="line">$ pacman -S efibootmgr</span><br><span class="line">$ grub-install --target&#x3D;x86_64-efi --efi-directory&#x3D;&#x2F;boot&#x2F;efi --bootloader-id&#x3D;arch_grub --recheck</span><br></pre></td></tr></table></figure>
+<p>把 grub 設定存進去</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ grub-mkconfig -o &#x2F;boot&#x2F;grub&#x2F;grub.cfg</span><br></pre></td></tr></table></figure>
+<p>設定 root 密碼</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ passwd</span><br></pre></td></tr></table></figure>
+<p>離開 arch-chroot 回到 usb 上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ exit</span><br></pre></td></tr></table></figure>
+<p>然後 umount</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ umount &#x2F;mnt&#x2F;boot&#x2F;efi</span><br><span class="line">$ umount &#x2F;mnt&#x2F;home</span><br><span class="line">$ umount &#x2F;mnt</span><br></pre></td></tr></table></figure>
+<p>然後就可以重開機了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ reboot</span><br></pre></td></tr></table></figure>
+<p>開機之後就可以安裝桌面了，我自己是用 gnome 下一篇在寫一下怎麼裝</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#事前準備"><span class="toc-number">1.</span> <span class="toc-text">事前準備</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#連上網路"><span class="toc-number">2.</span> <span class="toc-text">連上網路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#切割硬碟"><span class="toc-number">3.</span> <span class="toc-text">切割硬碟</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化"><span class="toc-number">4.</span> <span class="toc-text">格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#掛載"><span class="toc-number">5.</span> <span class="toc-text">掛載</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-number">6.</span> <span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝-grub"><span class="toc-number">7.</span> <span class="toc-text">安裝 grub</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2017/11/28/arch-installation/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2017/11/28/arch-installation/&text=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2017/11/28/arch-installation/&is_video=false&description=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Arch Linux 安裝小筆記&body=Check out this article: https://muller.nctu.me/2017/11/28/arch-installation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2017/11/28/arch-installation/&title=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2017/11/28/arch-installation/&name=Arch Linux 安裝小筆記&description=&lt;p&gt;最近幫一個朋友裝了 Arch 想說順便紀錄一下安裝步驟，希望沒有寫錯或遺漏的 XD&lt;br&gt;他的電腦是 Asus N580VD，跟 Linux 相容的很好，推推&lt;/p&gt;
+&lt;h2 id=&#34;事前準備&#34;&gt;&lt;a href=&#34;#事前準備&#34; class=&#34;headerlink&#34; title=&#34;事前準備&#34;&gt;&lt;/a&gt;事前準備&lt;/h2&gt;&lt;p&gt;安裝之前當然要下載安裝媒體啦，可以去&lt;a href=&#34;https://www.archlinux.org/download/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;官網&lt;/a&gt;下載然後燒到 usb 裡面，記得選 Taiwan 的 mirror 下載比較快&lt;br&gt;然後用 usb 開機就可以開始安裝了&lt;br&gt;然後建議安裝的時候準備另一台電腦或是手機可以邊裝邊查&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2017/11/28/arch-installation/&t=Arch Linux 安裝小筆記" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2015-2022
+    Muller Lee
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139969821-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-139969821-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 's094392';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

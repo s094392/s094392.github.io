@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="IntroductionRISC-V is an open standard Instruction Set Architecture. Unlike most other ISA designs, the RISC-V ISA is provided under open source licenses that do not require fees to use. The RISC-V wa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V Introduction">
+<meta property="og:url" content="https://muller.nctu.me/2020/07/04/riscv-introduction/index.html">
+<meta property="og:site_name" content="睦">
+<meta property="og:description" content="IntroductionRISC-V is an open standard Instruction Set Architecture. Unlike most other ISA designs, the RISC-V ISA is provided under open source licenses that do not require fees to use. The RISC-V wa">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://muller.nctu.me/2020/07/04/riscv-introduction/riscv.png">
+<meta property="article:published_time" content="2020-07-03T16:01:38.000Z">
+<meta property="article:modified_time" content="2022-01-08T02:21:17.700Z">
+<meta property="article:author" content="Muller Lee">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://muller.nctu.me/2020/07/04/riscv-introduction/riscv.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/myfavicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/myandroid-icon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/myapple-icon-180x180.png">
+        
+      
+    
+    <!-- title -->
+    <title>RISC-V Introduction</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2020/07/09/riscv-exception-interrupt/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2019/10/08/lambda-calculus/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2020/07/04/riscv-introduction/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&text=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&is_video=false&description=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RISC-V Introduction&body=Check out this article: https://muller.nctu.me/2020/07/04/riscv-introduction/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&name=RISC-V Introduction&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2020/07/04/riscv-introduction/&t=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Features"><span class="toc-number">2.</span> <span class="toc-text">Key Features</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">2.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privileged-Architecture"><span class="toc-number">3.</span> <span class="toc-text">Privileged Architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Next"><span class="toc-number">4.</span> <span class="toc-text">Next..</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">5.</span> <span class="toc-text">References</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        RISC-V Introduction
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Muller Lee</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-07-03T16:01:38.000Z" itemprop="datePublished">2020-07-04</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Architecture/">Architecture</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>RISC-V is an open standard Instruction Set Architecture. Unlike most other ISA designs, the RISC-V ISA is provided under open source licenses that do not require fees to use. The RISC-V was first introduced at 2010 by David Patterson at Berkeley. RISC-V is widely adopted by a lot of companies because the features like modular design and open source licenses fit current environment of IoT and Machine learning edge devices.</p>
+<img src="/2020/07/04/riscv-introduction/riscv.png" class="" title="[riscv-introduction]">
+
+<h2 id="Key-Features"><a href="#Key-Features" class="headerlink" title="Key Features"></a>Key Features</h2><p>The RISC-V is a free, open and lightweight ISA supervised by a nonprofit foundation, which means you don’t need to spend plenty of money to buy a license and are free to modified and adjust the ISA to meet your requirement. Furthermore, The RISC-V is modular designed and provides several standard ISA set for user to adopt. Also, the processor designers are free to create their own ISA sets.<br>A processor designer should choose a Base ISA and multiple Extensions ISA.</p>
+<ul>
+<li>Base ISAs<ul>
+<li>RV32I</li>
+<li>RV64I</li>
+<li>RV32E</li>
+<li>RV128I</li>
+</ul>
+</li>
+<li>Extensions<ul>
+<li>M Standard (Integer Multiplication and Divison)</li>
+<li>A Standard (Atomic Instructions)</li>
+<li>F Standard (Single-Precision Floating-Point)</li>
+<li>D Standard (Double-Precision Floating-Point)</li>
+<li>C Standard (Compressed Instruction)</li>
+</ul>
+</li>
+</ul>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>For example, FU540, a processor produced by SiFive, is labeled “RV64IMAC”. Which means this 64-Bit processor is adopted M Standard, A Standard and C Standard.</p>
+<h2 id="Privileged-Architecture"><a href="#Privileged-Architecture" class="headerlink" title="Privileged Architecture"></a>Privileged Architecture</h2><p>The privileged architecture in RISC-V contains three privileged levels: Machine, Supervisor and User. Privilege levels are used to provide protection between different components of the software stack, and attempts to perform operations not permitted by the current privilege mode will cause an exception raised.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Encoding</th>
+<th>Name</th>
+<th>Abbreviation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>00</td>
+<td>User/Application</td>
+<td>U</td>
+</tr>
+<tr>
+<td>1</td>
+<td>01</td>
+<td>Supervisor</td>
+<td>S</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10</td>
+<td>Reserved</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>11</td>
+<td>Machine</td>
+<td>M</td>
+</tr>
+</tbody></table>
+<p>The Machine level has the highest privileges and is the only mandatory privilege level for a RISC-V hardware platform. The supervisor level can’t access crucial configuration of the processor but has the privilege to control the virtual memory addressing. User level has least privilege and usually runs untrusted program.</p>
+<p>Each level has corresponding core set of ISA and optional extensions. Privileged instructions and CSRs (control and status registers) are executable and accessible only from appropriate mode (or higher). For example, the register mstatus is an important CSR that contains machine level configurations and information. So, this register is accessible only from Machine level.</p>
+<p>Processor designers could determine the adaption of these three levels based on their requirements (But Machine level is mandatory). That is, the simplest RISC-V implementations may provide only M-mode, though this will provide no protection against incorrect or malicious application code.</p>
+<table>
+<thead>
+<tr>
+<th>Number of levels</th>
+<th>Supported Modes</th>
+<th>Intended Usage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>M</td>
+<td>Simple embedded systems</td>
+</tr>
+<tr>
+<td>2</td>
+<td>M, U</td>
+<td>Secure embedded systems</td>
+</tr>
+<tr>
+<td>3</td>
+<td>M, S, U</td>
+<td>Systems running Unix-like operating systems</td>
+</tr>
+</tbody></table>
+<h2 id="Next"><a href="#Next" class="headerlink" title="Next.."></a>Next..</h2><p>The topic of next post would be how exception and interrupt work in RISC-V.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a href="https://content.riscv.org/wp-content/uploads/2019/06/riscv-spec.pdf" target="_blank" rel="noopener">The RISC-V Instruction Set Manual, Volume I: Unprivileged Architecture</a></li>
+<li><a href="https://content.riscv.org/wp-content/uploads/2019/12/riscv-spec-20191213.pdf" target="_blank" rel="noopener">The RISC-V Instruction Set Manual, Volume II: Privileged Architecture</a></li>
+</ol>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Features"><span class="toc-number">2.</span> <span class="toc-text">Key Features</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-number">2.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privileged-Architecture"><span class="toc-number">3.</span> <span class="toc-text">Privileged Architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Next"><span class="toc-number">4.</span> <span class="toc-text">Next..</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">5.</span> <span class="toc-text">References</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2020/07/04/riscv-introduction/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&text=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&is_video=false&description=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RISC-V Introduction&body=Check out this article: https://muller.nctu.me/2020/07/04/riscv-introduction/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&title=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2020/07/04/riscv-introduction/&name=RISC-V Introduction&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2020/07/04/riscv-introduction/&t=RISC-V Introduction" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2015-2022
+    Muller Lee
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139969821-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-139969821-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 's094392';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

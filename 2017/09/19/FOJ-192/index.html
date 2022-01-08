@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="競程作業，2017 TOPC Problem E：FOJ-192 題目是要你算出大圓面積跟裡面的小多邊形面積的差大圓直接算就好了小多邊形的面積有點麻煩，要拿已知的條件去二分搜，猜出他的外接圓半徑高級題解在這：https:&#x2F;&#x2F;hackmd.io&#x2F;s&#x2F;Hy6LFym_b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FOJ 192. Fences">
+<meta property="og:url" content="https://muller.nctu.me/2017/09/19/FOJ-192/index.html">
+<meta property="og:site_name" content="睦">
+<meta property="og:description" content="競程作業，2017 TOPC Problem E：FOJ-192 題目是要你算出大圓面積跟裡面的小多邊形面積的差大圓直接算就好了小多邊形的面積有點麻煩，要拿已知的條件去二分搜，猜出他的外接圓半徑高級題解在這：https:&#x2F;&#x2F;hackmd.io&#x2F;s&#x2F;Hy6LFym_b">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-09-18T16:10:29.000Z">
+<meta property="article:modified_time" content="2022-01-08T02:21:17.700Z">
+<meta property="article:author" content="Muller Lee">
+<meta property="article:tag" content="FOJ">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/myfavicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/myandroid-icon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/myapple-icon-180x180.png">
+        
+      
+    
+    <!-- title -->
+    <title>FOJ 192. Fences</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2017/09/25/FOJ-197/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2017/09/18/FOJ-191/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2017/09/19/FOJ-192/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2017/09/19/FOJ-192/&text=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2017/09/19/FOJ-192/&is_video=false&description=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=FOJ 192. Fences&body=Check out this article: https://muller.nctu.me/2017/09/19/FOJ-192/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2017/09/19/FOJ-192/&name=FOJ 192. Fences&description=&lt;p&gt;競程作業，2017 TOPC Problem E：&lt;a href=&#34;https://oj.nctu.me/problems/192/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;FOJ-192&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;題目是要你算出大圓面積跟裡面的小多邊形面積的差&lt;br&gt;大圓直接算就好了&lt;br&gt;小多邊形的面積有點麻煩，要拿已知的條件去二分搜，猜出他的外接圓半徑&lt;br&gt;高級題解在這：&lt;a href=&#34;https://hackmd.io/s/Hy6LFym_b&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://hackmd.io/s/Hy6LFym_b&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2017/09/19/FOJ-192/&t=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        FOJ 192. Fences
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Muller Lee</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2017-09-18T16:10:29.000Z" itemprop="datePublished">2017-09-19</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Algorithm/">Algorithm</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/FOJ/" rel="tag">FOJ</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>競程作業，2017 TOPC Problem E：<a href="https://oj.nctu.me/problems/192/" target="_blank" rel="noopener">FOJ-192</a></p>
+<p>題目是要你算出大圓面積跟裡面的小多邊形面積的差<br>大圓直接算就好了<br>小多邊形的面積有點麻煩，要拿已知的條件去二分搜，猜出他的外接圓半徑<br>高級題解在這：<a href="https://hackmd.io/s/Hy6LFym_b" target="_blank" rel="noopener">https://hackmd.io/s/Hy6LFym_b</a></p>
+<a id="more"></a>
+
+<p>這題我超雷，因為 C 的 abs 是專屬整數用的<br>浮點數要用 fabs<br>但是 C++ 是通用<br>結果我自己跑都很正常但是送出去一直 WA<br>QQ</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _USE_MATH_DEFINES</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> RNAGE 1e-9</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> t, n;</span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;t;</span><br><span class="line">  <span class="comment">// scanf("%d", &amp;t);</span></span><br><span class="line">  <span class="keyword">while</span>(t--)&#123;</span><br><span class="line">    <span class="keyword">double</span> c, L, R, M, Max, tal, big;</span><br><span class="line">    <span class="keyword">double</span> ll[<span class="number">10010</span>];</span><br><span class="line">    <span class="keyword">bool</span> flag;</span><br><span class="line"></span><br><span class="line">    flag = <span class="number">0</span>;</span><br><span class="line">    big = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;c&gt;&gt;n;</span><br><span class="line">    <span class="comment">// scanf("%lf%d", &amp;c, &amp;n);</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">      <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;ll[i];</span><br><span class="line">      <span class="comment">// scanf("%lf", &amp;ll[i]);</span></span><br><span class="line">      <span class="keyword">if</span>(ll[i]&gt;big) big = ll[i];</span><br><span class="line">    &#125;</span><br><span class="line">    L = big/<span class="number">2</span>;</span><br><span class="line">    R = c;</span><br><span class="line">    <span class="comment">// int k=1000;</span></span><br><span class="line"></span><br><span class="line">    Max = <span class="number">-1</span>;</span><br><span class="line">    tal = <span class="number">0</span>;</span><br><span class="line">    M = big/<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">double</span> dtmp;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">      dtmp = <span class="built_in">asin</span>(ll[i]/(<span class="number">2</span>*M))*<span class="number">2</span>;</span><br><span class="line">      <span class="comment">// l[i] = acos((2*M*M - ll[i]*ll[i])/(2*M*M));</span></span><br><span class="line">      <span class="comment">// printf("%f ", (2*M*M - ll[i]*ll[i])/(2*M*M));</span></span><br><span class="line">      <span class="keyword">if</span> (dtmp&gt;Max) Max = dtmp;</span><br><span class="line">      tal += dtmp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">fabs</span>(tal-Max*<span class="number">2</span><span class="number">-0.0</span>)&lt;RNAGE)&#123;</span><br><span class="line">      M = M;</span><br><span class="line"><span class="comment">//      std::cout&lt;&lt;tal&lt;&lt;" "&lt;&lt;Max&lt;&lt;" "&lt;&lt;abs(tal-Max*2)&lt;&lt;"\n";</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(tal-Max*<span class="number">2</span>&lt;<span class="number">0</span>)&#123;</span><br><span class="line">      <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        flag = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// printf("up\n");</span></span><br><span class="line">        M = (L + R)/<span class="number">2</span>;</span><br><span class="line">        Max = <span class="number">0</span>;</span><br><span class="line">        tal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">double</span> dtmp;</span><br><span class="line">        <span class="comment">// printf("MMMMM::::%f\n", M);</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line"></span><br><span class="line">          dtmp = <span class="built_in">asin</span>(ll[i]/(<span class="number">2</span>*M))*<span class="number">2</span>;</span><br><span class="line">          <span class="comment">// l[i] = acos((2*M*M - ll[i]*ll[i])/(2*M*M));</span></span><br><span class="line">          <span class="comment">// printf("%f ", (2*M*M - ll[i]*ll[i])/(2*M*M));</span></span><br><span class="line">          <span class="keyword">if</span> (dtmp&gt;Max) Max = dtmp;</span><br><span class="line">          tal += dtmp;</span><br><span class="line">        &#125;</span><br><span class="line">        tal-=Max;</span><br><span class="line">        <span class="comment">// printf("\n");</span></span><br><span class="line">        <span class="comment">// printf("%f %f %f %f %f %f\n",l[0], l[1], l[2], Max, tal, tal-Max);</span></span><br><span class="line">        <span class="comment">// now = tal-Max;</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">fabs</span>(tal-Max)&lt;=RNAGE) <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(tal-Max&gt;RNAGE)&#123;</span><br><span class="line">          <span class="comment">// printf("kkkkk\n");</span></span><br><span class="line">          R = M;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(tal-Max&lt;-RNAGE)&#123;</span><br><span class="line">          <span class="comment">// printf("jizz\n");</span></span><br><span class="line">          L = M;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// else if(tal-Max*2&gt;0)&#123;</span></span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        M = (L + R)/<span class="number">2</span>;</span><br><span class="line">        Max = <span class="number">0</span>;</span><br><span class="line">        tal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">double</span> dtmp;</span><br><span class="line">        <span class="comment">// printf("MMMMM::::%f\n", M);</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">          dtmp = <span class="built_in">asin</span>(ll[i]/(<span class="number">2</span>*M))*<span class="number">2</span>;</span><br><span class="line">          <span class="comment">// l[i] = acos((2*M*M - ll[i]*ll[i])/(2*M*M));</span></span><br><span class="line">          <span class="comment">// printf("%f ", (2*M*M - ll[i]*ll[i])/(2*M*M));</span></span><br><span class="line">          <span class="keyword">if</span> (dtmp&gt;Max) Max = dtmp;</span><br><span class="line">          tal += dtmp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// printf("\n");</span></span><br><span class="line">        <span class="comment">// printf("%f %f %f %f %f %f\n",l[0], l[1], l[2], Max, tal, tal-Max);</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>((tal<span class="number">-2</span>*M_PI)&lt;-RNAGE)&#123;</span><br><span class="line">          R = M;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>((tal<span class="number">-2</span>*M_PI)&gt;RNAGE)&#123;</span><br><span class="line">          <span class="comment">// printf("jizz");</span></span><br><span class="line">          L = M;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// printf("%f %f %f %f %f\n", Max, tal, l[0], l[1], l[2]);</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">double</span> bigO = (c/M_PI/<span class="number">2</span>)*(c/M_PI/<span class="number">2</span>)*M_PI;</span><br><span class="line">    <span class="keyword">double</span> smallO = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">double</span> s;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">      s = (M+M+ll[i])/<span class="number">2</span>;</span><br><span class="line">      smallO+=<span class="built_in">sqrt</span>(s*(s-M)*(s-M)*(s-ll[i]));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">      s = (M+M+big)/<span class="number">2</span>;</span><br><span class="line">      smallO-=<span class="built_in">sqrt</span>(s*(s-M)*(s-M)*(s-big));</span><br><span class="line">      smallO-=<span class="built_in">sqrt</span>(s*(s-M)*(s-M)*(s-big));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// printf("%lf\n", smallO);</span></span><br><span class="line">    <span class="comment">// printf("%lf\n", M);</span></span><br><span class="line">    <span class="comment">// printf("%lf\n", bigO-smallO);</span></span><br><span class="line"><span class="comment">//    std::cout&lt;&lt;M&lt;&lt;"\n";</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="built_in">std</span>::setprecision(<span class="number">15</span>)&lt;&lt;bigO-smallO&lt;&lt;<span class="string">"\n"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2017/09/19/FOJ-192/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2017/09/19/FOJ-192/&text=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2017/09/19/FOJ-192/&is_video=false&description=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=FOJ 192. Fences&body=Check out this article: https://muller.nctu.me/2017/09/19/FOJ-192/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2017/09/19/FOJ-192/&title=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2017/09/19/FOJ-192/&name=FOJ 192. Fences&description=&lt;p&gt;競程作業，2017 TOPC Problem E：&lt;a href=&#34;https://oj.nctu.me/problems/192/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;FOJ-192&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;題目是要你算出大圓面積跟裡面的小多邊形面積的差&lt;br&gt;大圓直接算就好了&lt;br&gt;小多邊形的面積有點麻煩，要拿已知的條件去二分搜，猜出他的外接圓半徑&lt;br&gt;高級題解在這：&lt;a href=&#34;https://hackmd.io/s/Hy6LFym_b&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://hackmd.io/s/Hy6LFym_b&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2017/09/19/FOJ-192/&t=FOJ 192. Fences" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2015-2022
+    Muller Lee
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139969821-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-139969821-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 's094392';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

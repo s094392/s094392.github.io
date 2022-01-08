@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Exception and InterruptWhen the core enters a trap, the core will store current state, the cause and address of current instruction to corresponding register and Jump to the handler table stored in re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V Exception and Interrupt implementation">
+<meta property="og:url" content="https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/index.html">
+<meta property="og:site_name" content="睦">
+<meta property="og:description" content="Exception and InterruptWhen the core enters a trap, the core will store current state, the cause and address of current instruction to corresponding register and Jump to the handler table stored in re">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/mtvec.png">
+<meta property="og:image" content="https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/mie.png">
+<meta property="og:image" content="https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/result.png">
+<meta property="article:published_time" content="2020-07-09T15:36:09.000Z">
+<meta property="article:modified_time" content="2022-01-08T02:21:17.700Z">
+<meta property="article:author" content="Muller Lee">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/mtvec.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/myfavicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/myandroid-icon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/myapple-icon-180x180.png">
+        
+      
+    
+    <!-- title -->
+    <title>RISC-V Exception and Interrupt implementation</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2021/06/03/google-interview/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2020/07/04/riscv-introduction/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&text=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&is_video=false&description=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RISC-V Exception and Interrupt implementation&body=Check out this article: https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&name=RISC-V Exception and Interrupt implementation&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&t=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Exception-and-Interrupt"><span class="toc-number">1.</span> <span class="toc-text">Exception and Interrupt</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Exception"><span class="toc-number">1.1.</span> <span class="toc-text">Exception</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interrupt"><span class="toc-number">1.2.</span> <span class="toc-text">Interrupt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exception-and-Interrupt-–-implementation-in-C"><span class="toc-number">2.</span> <span class="toc-text">Exception and Interrupt – implementation in C</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-run-my-code"><span class="toc-number">3.</span> <span class="toc-text">How to run my code</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Requirement"><span class="toc-number">3.1.</span> <span class="toc-text">Requirement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run"><span class="toc-number">3.2.</span> <span class="toc-text">Run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debug"><span class="toc-number">3.3.</span> <span class="toc-text">Debug</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        RISC-V Exception and Interrupt implementation
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Muller Lee</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-07-09T15:36:09.000Z" itemprop="datePublished">2020-07-09</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Architecture/">Architecture</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Exception-and-Interrupt"><a href="#Exception-and-Interrupt" class="headerlink" title="Exception and Interrupt"></a>Exception and Interrupt</h2><p>When the core enters a trap, the core will store current state, the cause and address of current instruction to corresponding register and Jump to the handler table stored in register mtvec.</p>
+<img src="/2020/07/09/riscv-exception-interrupt/mtvec.png" class="" title="[riscv-exception-interrupt]">
+<p>The register <em>mcause</em> stores the cause of current trap. The Interrupt bit in the <em>mcause</em> register is set if the trap was caused by an interrupt. The Exception Code field contains a code identifying the last exception. For example, Exception Code 8 means there is a environment call from User mode (like svc in arm) and Exception Code 2 means the processor meet an illegal instruction.</p>
+<h3 id="Exception"><a href="#Exception" class="headerlink" title="Exception"></a>Exception</h3><p>We can use the ECALL instruction to raise an exception for higher privilege request. For example, the implementation of system call. The ECALL instruction will update following registers with current status:</p>
+<ol>
+<li>update <em>mcause</em> with is_interuupt and exception_code</li>
+<li>update <em>mtval</em> with exception-specific information</li>
+<li>update <em>mstatus</em> with current mode</li>
+<li>update <em>mstatus</em> to disable interrupt</li>
+<li>update <em>mepc</em> with current instruction address</li>
+</ol>
+<h3 id="Interrupt"><a href="#Interrupt" class="headerlink" title="Interrupt"></a>Interrupt</h3><p>We can enable interrupts in every mode by setting corresponding interrupt-enable register (MIE/SIE/UIE). For example, we can enable machine timer interrupt by raising the MTIE bit in MIE register.</p>
+<img src="/2020/07/09/riscv-exception-interrupt/mie.png" class="" title="[riscv-exception-interrupt]">
+
+<p>Once an interrupt raised, the corresponding bit in the interrupt-pending register will also be raised and waiting the interrupt handler to reset it.</p>
+<h2 id="Exception-and-Interrupt-–-implementation-in-C"><a href="#Exception-and-Interrupt-–-implementation-in-C" class="headerlink" title="Exception and Interrupt – implementation in C"></a>Exception and Interrupt – implementation in C</h2><p>I’ve implemented a exception and interrupt example in RISC-V on qemu emulator. The example works as following steps:</p>
+<ol>
+<li>Switch to U-mode before the main function</li>
+<li>Raise an exception to enable timer interrupt</li>
+<li>Handle exception and interrupt<br>First, in the startup script, we add some code to load trap handle vector to the register mtvec and switch to User mode. <figure class="highlight as"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">   la     t0, trap_entry</span><br><span class="line">   csrw   mtvec, t0</span><br><span class="line">   lla t0, <span class="number">1</span>f</span><br><span class="line">   csrw mepc, t0</span><br><span class="line">   mret</span><br><span class="line"><span class="number">1</span>:</span><br><span class="line">   call   main</span><br></pre></td></tr></table></figure>
+In the trap handle vector, we should manually backup and restore current context with the stack and use MRET to return to User mode.<figure class="highlight as"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">.align <span class="number">2</span></span><br><span class="line">trap_entry:</span><br><span class="line">    addi sp, sp, <span class="number">-17</span>*<span class="number">4</span></span><br><span class="line">  </span><br><span class="line">    sw ra, <span class="number">0</span>*REGBYTES(sp)</span><br><span class="line">    sw a0, <span class="number">1</span>*REGBYTES(sp)</span><br><span class="line">    sw a1, <span class="number">2</span>*REGBYTES(sp)</span><br><span class="line">    sw a2, <span class="number">3</span>*REGBYTES(sp)</span><br><span class="line">    sw a3, <span class="number">4</span>*REGBYTES(sp)</span><br><span class="line">    sw a4, <span class="number">5</span>*REGBYTES(sp)</span><br><span class="line">    sw a5, <span class="number">6</span>*REGBYTES(sp)</span><br><span class="line">    sw a6, <span class="number">7</span>*REGBYTES(sp)</span><br><span class="line">    sw a7, <span class="number">8</span>*REGBYTES(sp)</span><br><span class="line">    sw t0, <span class="number">9</span>*REGBYTES(sp)</span><br><span class="line">    sw t1, <span class="number">10</span>*REGBYTES(sp)</span><br><span class="line">    sw t2, <span class="number">11</span>*REGBYTES(sp)</span><br><span class="line">    sw t3, <span class="number">12</span>*REGBYTES(sp)</span><br><span class="line">    sw t4, <span class="number">13</span>*REGBYTES(sp)</span><br><span class="line">    sw t5, <span class="number">14</span>*REGBYTES(sp)</span><br><span class="line">    sw t6, <span class="number">15</span>*REGBYTES(sp)</span><br><span class="line"></span><br><span class="line">    jal handle_trap</span><br><span class="line">  </span><br><span class="line">    lw ra, <span class="number">0</span>*REGBYTES(sp)</span><br><span class="line">    lw a0, <span class="number">1</span>*REGBYTES(sp)</span><br><span class="line">    lw a1, <span class="number">2</span>*REGBYTES(sp)</span><br><span class="line">    lw a2, <span class="number">3</span>*REGBYTES(sp)</span><br><span class="line">    lw a3, <span class="number">4</span>*REGBYTES(sp)</span><br><span class="line">    lw a4, <span class="number">5</span>*REGBYTES(sp)</span><br><span class="line">    lw a5, <span class="number">6</span>*REGBYTES(sp)</span><br><span class="line">    lw a6, <span class="number">7</span>*REGBYTES(sp)</span><br><span class="line">    lw a7, <span class="number">8</span>*REGBYTES(sp)</span><br><span class="line">    lw t0, <span class="number">9</span>*REGBYTES(sp)</span><br><span class="line">    lw t1, <span class="number">10</span>*REGBYTES(sp)</span><br><span class="line">    lw t2, <span class="number">11</span>*REGBYTES(sp)</span><br><span class="line">    lw t3, <span class="number">12</span>*REGBYTES(sp)</span><br><span class="line">    lw t4, <span class="number">13</span>*REGBYTES(sp)</span><br><span class="line">    lw t5, <span class="number">14</span>*REGBYTES(sp)</span><br><span class="line">    lw t6, <span class="number">15</span>*REGBYTES(sp)</span><br><span class="line"></span><br><span class="line">    addi sp, sp, <span class="number">17</span>*<span class="number">4</span></span><br><span class="line"></span><br><span class="line">    mret</span><br></pre></td></tr></table></figure>
+In the main function we just initialize the Uart for printing messages and use ECALL instruction to raise an exception for enable timer interrupt.<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    uart_init();</span><br><span class="line">    print_s(<span class="string">"Hello world!\n"</span>);</span><br><span class="line">    print_s(<span class="string">"Raise exception to enable timer...\n"</span>);</span><br><span class="line">    <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"ecall"</span>)</span></span>;</span><br><span class="line">    print_s(<span class="string">"Back to user mode\n"</span>);</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+The only thing trap handler does is to determine whether the incoming trap is an interrupt or not and call appropriate handler. To be noticed, the register <em>mepc</em> stores the address of instruction before entering a trap. In our case, the address would be the address of the instruction ECALL. So, we need to modified the <em>mepc</em> to the address of next instruction after the exception handler.<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">handle_trap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint64_t</span> mcause, mepc;</span><br><span class="line">    <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"csrr %0, mcause"</span> : <span class="string">"=r"</span>(mcause))</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"csrr %0, mepc"</span> : <span class="string">"=r"</span>(mepc))</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mcause &gt;&gt; <span class="number">63</span>) &#123;</span><br><span class="line">        handle_interrupt(mcause);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        handle_exception(mcause);</span><br><span class="line">        <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"csrr t0, mepc"</span>)</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"addi t0, t0, 0x4"</span>)</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"csrw mepc, t0"</span>)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+In the exception handler, we need to enable the timer interrupt by set the MTIE bit in the MIE (Machine interrupt-enable register) to 1. The timer interrupt when the machine time counter <em>mtime</em> &gt;= register <em>mtimecmp</em>. And once we modified the register <em>mtimecmp</em>, the MTIP bit in the MIP (Machine interrupt-pending register) would be cleared automatically.<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">handle_exception</span><span class="params">(<span class="keyword">uint64_t</span> mcause)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> mie;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mcause == <span class="number">0x8</span>) &#123;</span><br><span class="line">        *MTIMECMP = *MTIME + <span class="number">0xfffff</span> * <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"csrr %0, mie"</span> : <span class="string">"=r"</span>(mie))</span></span>;</span><br><span class="line">        mie |= (<span class="number">1</span> &lt;&lt; <span class="number">7</span>);</span><br><span class="line">        <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"csrw mie, %0"</span> : <span class="string">"=r"</span>(mie))</span></span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        print_s(<span class="string">"Unknown exception: "</span>);</span><br><span class="line">        print_i(mcause &lt;&lt; <span class="number">1</span> &gt;&gt; <span class="number">1</span>);</span><br><span class="line">        print_s(<span class="string">"\n"</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">            ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+In the interrupt handler, we only need to reset the register mtimecmp.<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">handle_interrupt</span><span class="params">(<span class="keyword">uint64_t</span> mcause)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((mcause &lt;&lt; <span class="number">1</span> &gt;&gt; <span class="number">1</span>) == <span class="number">0x7</span>) &#123;</span><br><span class="line">        print_s(<span class="string">"Timer Interrupt: "</span>);</span><br><span class="line">        print_i(++count);</span><br><span class="line">        print_s(<span class="string">"\n"</span>);</span><br><span class="line"></span><br><span class="line">        *MTIMECMP = *MTIME + <span class="number">0xfffff</span> * <span class="number">5</span>;</span><br><span class="line">        <span class="keyword">if</span> (count == <span class="number">10</span>) &#123;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> mie;</span><br><span class="line">            <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"csrr %0, mie"</span> : <span class="string">"=r"</span>(mie))</span></span>;</span><br><span class="line">            mie &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">7</span>);</span><br><span class="line">            <span class="function"><span class="keyword">asm</span> <span class="title">volatile</span><span class="params">(<span class="string">"csrw mie, %0"</span> : <span class="string">"=r"</span>(mie))</span></span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        print_s(<span class="string">"Unknown interrupt: "</span>);</span><br><span class="line">        print_i(mcause &lt;&lt; <span class="number">1</span> &gt;&gt; <span class="number">1</span>);</span><br><span class="line">        print_s(<span class="string">"\n"</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">            ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+The result:<img src="/2020/07/09/riscv-exception-interrupt/result.png" class="" title="[riscv-exception-interrupt]">
+
+</li>
+</ol>
+<h2 id="How-to-run-my-code"><a href="#How-to-run-my-code" class="headerlink" title="How to run my code"></a>How to run my code</h2><p>The source code is available on my github:<br><a href="https://github.com/s094392/riscv-bare-metal" target="_blank" rel="noopener">https://github.com/s094392/riscv-bare-metal</a><br>This bare metal example runs on qemu and you should install required toolchain of riscv64.</p>
+<h3 id="Requirement"><a href="#Requirement" class="headerlink" title="Requirement"></a>Requirement</h3><ul>
+<li>qemu</li>
+<li>riscv64-linux-gnu-*</li>
+</ul>
+<h3 id="Run"><a href="#Run" class="headerlink" title="Run"></a>Run</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">make run</span><br></pre></td></tr></table></figure>
+
+<h3 id="Debug"><a href="#Debug" class="headerlink" title="Debug"></a>Debug</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">make debug</span><br><span class="line">riscv64-linux-gnu-gdb -x debug.txt</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Exception-and-Interrupt"><span class="toc-number">1.</span> <span class="toc-text">Exception and Interrupt</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Exception"><span class="toc-number">1.1.</span> <span class="toc-text">Exception</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interrupt"><span class="toc-number">1.2.</span> <span class="toc-text">Interrupt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exception-and-Interrupt-–-implementation-in-C"><span class="toc-number">2.</span> <span class="toc-text">Exception and Interrupt – implementation in C</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-run-my-code"><span class="toc-number">3.</span> <span class="toc-text">How to run my code</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Requirement"><span class="toc-number">3.1.</span> <span class="toc-text">Requirement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run"><span class="toc-number">3.2.</span> <span class="toc-text">Run</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debug"><span class="toc-number">3.3.</span> <span class="toc-text">Debug</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&text=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&is_video=false&description=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RISC-V Exception and Interrupt implementation&body=Check out this article: https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&title=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&name=RISC-V Exception and Interrupt implementation&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2020/07/09/riscv-exception-interrupt/&t=RISC-V Exception and Interrupt implementation" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2015-2022
+    Muller Lee
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139969821-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-139969821-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 's094392';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>

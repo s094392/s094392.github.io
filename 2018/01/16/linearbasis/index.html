@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="練習的時候有幾次遇到 xor 的題目自己怎想都想不到然後去查大陸人的題解大概都是說：看到 xor 就想到線性基阿，看到位元運算就想到線性基之類的東西結果拿線性基一下去 google 才發現這就是線性代數裡面的 basis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear basis for xor">
+<meta property="og:url" content="https://muller.nctu.me/2018/01/16/linearbasis/index.html">
+<meta property="og:site_name" content="睦">
+<meta property="og:description" content="練習的時候有幾次遇到 xor 的題目自己怎想都想不到然後去查大陸人的題解大概都是說：看到 xor 就想到線性基阿，看到位元運算就想到線性基之類的東西結果拿線性基一下去 google 才發現這就是線性代數裡面的 basis">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-01-16T15:22:49.000Z">
+<meta property="article:modified_time" content="2022-01-08T02:21:17.700Z">
+<meta property="article:author" content="Muller Lee">
+<meta property="article:tag" content="Math">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/myfavicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/myandroid-icon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/myapple-icon-180x180.png">
+        
+      
+    
+    <!-- title -->
+    <title>Linear basis for xor</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2018/03/30/tetris/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2017/11/30/chewing/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2018/01/16/linearbasis/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2018/01/16/linearbasis/&text=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2018/01/16/linearbasis/&is_video=false&description=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linear basis for xor&body=Check out this article: https://muller.nctu.me/2018/01/16/linearbasis/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2018/01/16/linearbasis/&name=Linear basis for xor&description=&lt;p&gt;練習的時候有幾次遇到 xor 的題目&lt;br&gt;自己怎想都想不到&lt;br&gt;然後去查大陸人的題解&lt;br&gt;大概都是說：看到 xor 就想到線性基阿，看到位元運算就想到線性基之類的東西&lt;br&gt;結果拿線性基一下去 google 才發現這就是線性代數裡面的 basis&lt;/p&gt;" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2018/01/16/linearbasis/&t=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Linear basis for xor
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Muller Lee</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-01-16T15:22:49.000Z" itemprop="datePublished">2018-01-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Algorithm/">Algorithm</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Math/" rel="tag">Math</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>練習的時候有幾次遇到 xor 的題目<br>自己怎想都想不到<br>然後去查大陸人的題解<br>大概都是說：看到 xor 就想到線性基阿，看到位元運算就想到線性基之類的東西<br>結果拿線性基一下去 google 才發現這就是線性代數裡面的 basis</p>
+<a id="more"></a>
+
+<p>basis 就是組成(span)一個向量空間(vector space)的基本向量<br>舉個簡單的例子<br>$(1, 0), (0, 1)$ 就是一個 $R^2$ 的 vector space 的兩個 basis<br>至於這東西跟 xor 有什麼關係呢？<br>主要是跟 xor 的性質有關</p>
+<p>我們先看 vector space 的八個定理（出自<a href="https://zh.wikipedia.org/wiki/%E5%90%91%E9%87%8F%E7%A9%BA%E9%97%B4" target="_blank" rel="noopener">維基百科</a>）</p>
+<table>
+<thead>
+<tr>
+<th>公理</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>向量加法的結合律</td>
+<td>\[u + (v + w) = (u + v) + w\]</td>
+</tr>
+<tr>
+<td>向量加法的交換律</td>
+<td>\[u + v = v + u\]</td>
+</tr>
+<tr>
+<td>向量加法的單位元素</td>
+<td>\[存在一個叫做零向量的元素0 ∈ V，使得對任意u ∈ V都滿足u + 0 = u\]</td>
+</tr>
+<tr>
+<td>向量加法的反元素</td>
+<td>\[對任意v ∈ V都存在其反元素−v ∈ V使得v + (−v) = 0\]</td>
+</tr>
+<tr>
+<td>純量乘法與純量的體乘法相容</td>
+<td>\[a(bv) = (ab)v\]</td>
+</tr>
+<tr>
+<td>純量乘法的單位元素</td>
+<td>\[體F存在乘法單位元素1滿足1v = v\]</td>
+</tr>
+<tr>
+<td>純量乘法對向量加法的分配律</td>
+<td>\[a(u + v) = au + av\]</td>
+</tr>
+<tr>
+<td>純量乘法對體加法的分配律</td>
+<td>\[(a + b)v = av + bv\]</td>
+</tr>
+</tbody></table>
+<p>如果我們定義一個 space 是由 n 個二進位的數字互相 xor 可以生出來的數組成的<br>不難發現這個 space 正好滿足這八個公理，只要把加法換成 xor 就好了<br>所以呢，我們就可以維護一組 basis  來表示某數組可以 xor 出的所有數</p>
+<p>方法如下：<br>一個一個數字來處理，如果當前這個數已經可以用目前的 bases span 出來，就跳過，否則就把它加進 bases 裡面</p>
+<p>實做的方法就是把每個數用二進位表示成一個向量，然後維護一個 upper triangular 的 bases 矩陣，當拿到一個 n 位的數 a（以二進位來看），就先看看 bases 矩陣裡面有沒有 n 位數的 basis ，沒有的話就把它放進 bases 裡面，有的話就把 a ^= 那個 basis，如此一來 a 就會降位，然後一直重複降位直到 a 等於 0 或是bases 矩陣裡面有沒有 n 位數的 basis</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// add tmp</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = n; j &gt; <span class="number">0</span>; j--) &#123;</span><br><span class="line">    <span class="keyword">if</span> (tmp &gt;&gt; (j - <span class="number">1</span>) &amp; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (V[j])</span><br><span class="line">            tmp ^= V[j];</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            V[j] = tmp;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>V[1]</code> 放的是二進位是 <code>1</code> 位數的數，<code>V[n]</code>放的是二進位是 <code>n</code> 位數的數<br>首先從最高位開始找 tmp 的第一個 1，然後檢查 <code>V[i]</code> 有沒有東西</p>
+<p>有一些時候會需要在 space 裡面找出一些符合題目要求的數（比如說可以 xor 出最大的數），這時候可以消去的時候順便把給個位數整理，讓每一個位數的 1 都只存在一個 basis 裡面<br>因此每次找到一個 basis 的時候，先把剛找到的那個後面的 1 都先儘量消掉，接著在區消掉前面比它位數多的 basis 的 1</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// add tmp into vector space</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = n; j &gt; <span class="number">0</span>; j--) &#123;</span><br><span class="line">    <span class="keyword">if</span> (tmp &gt;&gt; (j - <span class="number">1</span>) &amp; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (V[j])</span><br><span class="line">            tmp ^= V[j];</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            V[j] = tmp;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = j - <span class="number">1</span>; k &gt;= <span class="number">0</span>; k--)</span><br><span class="line">	            <span class="keyword">if</span> (V[k] &amp;&amp; V[j] &gt;&gt; (k - <span class="number">1</span>) &amp; <span class="number">1</span>) V[j] ^= V[k];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = j + <span class="number">1</span>; k &lt;= n; k++)</span><br><span class="line">	            <span class="keyword">if</span> (V[k] &gt;&gt; (j - <span class="number">1</span>) &amp; <span class="number">1</span>) V[k] ^= V[j];</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看一下實際的例子，以下模擬出自：<a href="https://blog.sengxian.com/algorithms/linear-basis" target="_blank" rel="noopener">线性基学习笔记 Sengxian’s Blog</a></p>
+<blockquote>
+<p>我們來模擬下這個過程，$n = 5, a = {7, 1, 4, 3, 5}$。一開始矩陣是這樣的：</p>
+<p>\begin{bmatrix} 0 &amp; 0 &amp; 0\\ 0 &amp; 0 &amp; 0\\ 0 &amp; 0 &amp; 0 \end{bmatrix}</p>
+<p>​​  加入 $7 = (111)_2$，矩陣變為：</p>
+<p>\begin{bmatrix} 1 &amp; 1 &amp; 1\\ 0 &amp; 0 &amp; 0\\ 0 &amp; 0 &amp; 0 \end{bmatrix}</p>
+<p>加入 $1 = (001)_2$​​ ，添加到最後一行，同時為了維護對角矩陣，消去第一行的最低位，矩陣變為：</p>
+<p>\begin{bmatrix} 1 &amp; 1 &amp; 0\\ 0 &amp; 0 &amp; 0\\ 0 &amp; 0 &amp; 1 \end{bmatrix}</p>
+<p>加入 $4 = (100)_2$ ，由於第一行已經有數了，它被 xor 為 $(010)_2$ ​​<br>，加入第二行，同時為了維護對角矩陣，消去第一行的第二位，矩陣變為：</p>
+<p>\begin{bmatrix} 1 &amp; 0 &amp; 0\\ 0 &amp; 1 &amp; 0\\ 0 &amp; 0 &amp; 1 \end{bmatrix}</p>
+</blockquote>
+<p>如此一來我們就得到一個上三角的矩陣<br>那麼要怎麼判端某個數是不是存在這個 space 呢？<br>作法就是從該數的最高位開始 xor 對應的 basis（如 1001 就先 <code>^= V[4]</code>），並重複做下去，如果最後變成 0 就代表他在這個 space 裡面</p>
+<p>有關於 vector space 在 xor 的應用大概就是這樣<br>之所以會特別寫一篇筆記是因為競程二期末考得時候有一題就是出這個，而且真的很水，雖然考試當下我一眼就看出來是要用 basis 去算，但是那時候不知道怎麼快速的維護 basis  矩陣（以前有看過作法但是沒有理解），有點殘念所以回去之後跟教授要了題目跟測資自己寫自己 judge XD</p>
+<p>至於題目的話是清大內部比賽的題目所以就不全部放上來了，這裡寫稍微編譯之後的題目敘述就好：</p>
+<blockquote>
+<p>給一個 target ，以及 n 個數，然後求最少可以用第幾個數之前的數 xor 出 target 即可</p>
+</blockquote>
+<p>我的方法是維護一個 bases 矩陣然後每次加完就 check 一下是不是已經可以 span 出 target 了</p>
+<p>附上我寫的垃圾 code ：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ui unsigned int</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ull unsigned long long</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INF 1023456789</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> jizz    \</span></span><br><span class="line">    <span class="built_in">cin</span>.tie(<span class="number">0</span>); \</span><br><span class="line">    ios_base::sync_with_stdio(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ll n, t, tar = <span class="number">0</span>, tmp, ans = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; t;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;ll&gt; <span class="title">V</span><span class="params">(n + <span class="number">2</span>, <span class="number">0</span>)</span></span>;  <span class="comment">// vector space</span></span><br><span class="line">    <span class="built_in">string</span> tmps;</span><br><span class="line">    <span class="comment">// target</span></span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; tmps;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        tar &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (tmps[i] == <span class="string">'1'</span>) tar += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= t; i++) &#123;</span><br><span class="line">        tmp = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; tmps;</span><br><span class="line">        <span class="keyword">if</span> (!ans) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">                tmp &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (tmps[j] == <span class="string">'1'</span>) tmp += <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// add tmp</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = n; j &gt; <span class="number">0</span>; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (tmp &gt;&gt; (j - <span class="number">1</span>) &amp; <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (V[j])</span><br><span class="line">                        tmp ^= V[j];</span><br><span class="line">                    <span class="keyword">else</span> &#123;</span><br><span class="line">                        V[j] = tmp;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// check if the vector space can span the target</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = n; j &gt; <span class="number">0</span>; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (tar &gt;&gt; (j - <span class="number">1</span>) &amp; <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (V[j])</span><br><span class="line">                        tar ^= V[j];</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (j == <span class="number">1</span>) ans = (ll)i * (ll)i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ans)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="string">"\n"</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">"\n"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    jizz;</span><br><span class="line">    <span class="keyword">int</span> t;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; t;</span><br><span class="line">    <span class="keyword">while</span> (t--) &#123;</span><br><span class="line">        solve();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在本機測最慢的冊資 0.82 s 應該是 OK 了</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://muller.nctu.me/2018/01/16/linearbasis/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://muller.nctu.me/2018/01/16/linearbasis/&text=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://muller.nctu.me/2018/01/16/linearbasis/&is_video=false&description=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linear basis for xor&body=Check out this article: https://muller.nctu.me/2018/01/16/linearbasis/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://muller.nctu.me/2018/01/16/linearbasis/&title=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://muller.nctu.me/2018/01/16/linearbasis/&name=Linear basis for xor&description=&lt;p&gt;練習的時候有幾次遇到 xor 的題目&lt;br&gt;自己怎想都想不到&lt;br&gt;然後去查大陸人的題解&lt;br&gt;大概都是說：看到 xor 就想到線性基阿，看到位元運算就想到線性基之類的東西&lt;br&gt;結果拿線性基一下去 google 才發現這就是線性代數裡面的 basis&lt;/p&gt;" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://muller.nctu.me/2018/01/16/linearbasis/&t=Linear basis for xor" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2015-2022
+    Muller Lee
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139969821-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-139969821-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 's094392';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</body>
+</html>
