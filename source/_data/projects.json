@@ -1,18 +1,28 @@
 [
     {
-        "name":"Penathon",
-        "url":"https://github.com/Team214-tw/penathon",
-        "desc":"A inference based type generator for Python, ykzheng improved."
-    },
-    {
        "name":"RISC-V Bare Metal",
        "url":"https://github.com/s094392/riscv-bare-metal",
        "desc":"A RISC-V bare-metal example with uart, exception and interrupt."
     },
     {
-       "name":"Raspberry Pi Simple OS(Course project)",
-       "url":"https://github.com/s094392/riscv-bare-metal",
-       "desc":"A operating system with process & memory management and a simple file system."
+       "name":"Raspberry Pi Simple OS",
+       "url":"https://github.com/s094392/NCTU-OSDI",
+       "desc":"A operating system with process & memory management and a simple fs."
+    },
+    {
+        "name":"Penathon",
+        "url":"https://github.com/Team214-tw/penathon",
+        "desc":"A inference based type generator for Python, ykzheng improved."
+    },
+    {
+       "name":"DownstairKid",
+       "url":"https://github.com/s094392/DownstairKid",
+       "desc":"A DownstairKid AI based on Deep Q-learning."
+    },
+    {
+       "name":"Android Particle Collision",
+       "url":"https://github.com/s094392/Android-particle-collision",
+       "desc":"A OpenGL particle collision example with parallel computation using vuda"
     },
     {
         "name":"Python ast visualizer",

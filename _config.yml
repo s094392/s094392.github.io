@@ -115,11 +115,12 @@ theme_config:
     height: 50
     url: /images/mylogo.png
     gravatar: false
+    grayout: true
 
   social_links:
     github: https://github.com/s094392
     facebook: https://www.facebook.com/s094392
-    mail: mailto:s094392@gmail.com
+    mail: mailto:blog@mullerlee.cyou
 
   copyright:
     start_year: 2015
